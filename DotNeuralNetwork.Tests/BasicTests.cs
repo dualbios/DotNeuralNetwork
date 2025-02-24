@@ -11,16 +11,17 @@ public class Tests {
 
     [Test]
     public void Test1() {
-        LinearFunctionedNet net = new("test net",
-                                      2,
-                                      4,
-                                      1,
-                                      [
-                                          x => torch.nn.functional.relu(x),
-                                          x => torch.nn.functional.relu(x),
-                                          x => torch.nn.functional.sigmoid(x)
-                                      ],
-                                      1);
+
+        LinearFunctionedNetBuilder builder = new("test net");
+        builder.SetInputSize(2)
+               .SetLayerCount(1)
+               .SetPerceptronCount(4)
+               .AddFunction(x => torch.nn.functional.relu(x))
+               .AddFunction(x => torch.nn.functional.relu(x))
+               .AddFunction(x => torch.nn.functional.sigmoid(x))
+               .SetOutputSize(1);
+        
+        LinearFunctionedNet net = builder.Build();
 
         float[,] xData = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } };
         float[] yData = { 0, 1, 1, 0 };

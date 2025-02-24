@@ -8,16 +8,16 @@ namespace DotNeuralNetwork.Tests;
 public class BuilderTest {
     [Test]
     public void CreateAgentTest() {
-        LinearFunctionedNet net = new("test net",
-                                      2,
-                                      4,
-                                      1,
-                                      [
-                                          x => torch.nn.functional.relu(x),
-                                          x => torch.nn.functional.relu(x),
-                                          x => torch.nn.functional.sigmoid(x)
-                                      ],
-                                      1);
+        LinearFunctionedNetBuilder builder = new("test net");
+        builder.SetInputSize(2)
+               .SetLayerCount(1)
+               .SetPerceptronCount(4)
+               .AddFunction(x => torch.nn.functional.relu(x))
+               .AddFunction(x => torch.nn.functional.relu(x))
+               .AddFunction(x => torch.nn.functional.sigmoid(x))
+               .SetOutputSize(1);
+        
+        LinearFunctionedNet net = builder.Build();
         
         torch.optim.Optimizer optimizer = torch.optim.Adam(net.parameters(), 0.01);
         torch.nn.Module<torch.Tensor, torch.Tensor, torch.Tensor> lossFunction = torch.nn.MSELoss(torch.nn.Reduction.Mean);
