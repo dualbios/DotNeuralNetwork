@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNeuralNetwork", "DotNeuralNetwork\DotNeuralNetwork.csproj", "{9151B6EE-06D2-4E6E-85FA-3BB4B3295605}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNeuralNetwork.Tests", "DotNeuralNetwork.Tests\DotNeuralNetwork.Tests.csproj", "{AA4B7A11-A4FB-4ED1-95C4-9F9DE2F40489}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9151B6EE-06D2-4E6E-85FA-3BB4B3295605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9151B6EE-06D2-4E6E-85FA-3BB4B3295605}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9151B6EE-06D2-4E6E-85FA-3BB4B3295605}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9151B6EE-06D2-4E6E-85FA-3BB4B3295605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA4B7A11-A4FB-4ED1-95C4-9F9DE2F40489}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA4B7A11-A4FB-4ED1-95C4-9F9DE2F40489}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA4B7A11-A4FB-4ED1-95C4-9F9DE2F40489}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA4B7A11-A4FB-4ED1-95C4-9F9DE2F40489}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

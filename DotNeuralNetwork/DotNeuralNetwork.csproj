@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>kDg.DotNeuralNetwork</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="TorchSharp" Version="0.105.0"/>
+        <PackageReference Include="libtorch-cpu-win-x64" Version="2.5.1" />
+    </ItemGroup>
+
+</Project>
