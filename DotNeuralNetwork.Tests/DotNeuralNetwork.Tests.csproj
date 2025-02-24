@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DotNeuralNetwork\DotNeuralNetwork.csproj" />
+        <ProjectReference Include="..\DotNeuralNetwork\DotNeuralNetwork.csproj"/>
     </ItemGroup>
 
 </Project>

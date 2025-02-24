@@ -1,7 +1,6 @@
 using System.Text;
 using kDg.DotNeuralNetwork.Nets;
 using TorchSharp;
-using TorchSharp.Modules;
 
 namespace DotNeuralNetwork.Tests;
 
@@ -30,7 +29,7 @@ public class Tests {
         torch.Tensor yTrain = torch.tensor(yData).reshape(-1, 1);
 
         torch.optim.Optimizer optimizer = torch.optim.Adam(net.parameters(), 0.01);
-        MSELoss lossFunction = torch.nn.MSELoss(reduction: torch.nn.Reduction.Mean);
+        torch.nn.Module<torch.Tensor, torch.Tensor, torch.Tensor> lossFunction = torch.nn.MSELoss(torch.nn.Reduction.Mean);
 
         var epochs = 5001;
         for (var epoch = 0; epoch < epochs; epoch++) {
@@ -57,8 +56,7 @@ public class Tests {
         float[] outputArray = output.data<float>().ToArray();
 
         const double threshold = 0.01;
-        Assert.Multiple(() =>
-        {
+        Assert.Multiple(() => {
             Assert.That(outputArray[0], Is.LessThan(threshold));
             Assert.That(outputArray[1], Is.GreaterThan(1.0 - threshold));
             Assert.That(outputArray[2], Is.GreaterThan(1.0 - threshold));
