@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using kDg.DotNeuralNetwork.Exporters;
+using kDg.DotNeuralNetwork.Importers;
 using kDg.DotNeuralNetwork.Middlewares;
 using kDg.DotNeuralNetwork.Nets;
 using TorchSharp;
@@ -141,5 +143,21 @@ public class TrainAgent : IDisposable {
         LossFunction.Dispose();
         Model.Dispose();
         Optimizer.Dispose();
+    }
+
+    public void Export(IAgentExporter exporter) {
+        MemoryStream memoryStream = new();
+        BinaryWriter streamWriter = new(memoryStream);
+        Model.save(streamWriter);
+        
+        memoryStream.Seek(0, SeekOrigin.Begin);
+        exporter.Export("model", memoryStream);
+    }
+
+    public void Import(IAgentImporter importer) {
+        Stream stream = new MemoryStream();
+        importer.Import("model", stream);
+        stream.Seek(0, SeekOrigin.Begin);
+        Model.load(stream);
     }
 }
