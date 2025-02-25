@@ -2,7 +2,9 @@
 using System.Windows;
 using kDg.DotNeuralNetwork.Agents;
 using kDg.DotNeuralNetwork.Exporters;
+using kDg.DotNeuralNetwork.Importers;
 using kDg.DotNeuralNetwork.Nets;
+using Microsoft.Win32;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -70,18 +72,8 @@ public partial class MainWindow : Window {
         _historyResultsMiddleware.SetAgent(_agent);
 
         int epochs = int.Parse(EpochCountTextbox.Text);
-        Task.Run(()=> {
-            _agent.Fit(inputData, outputData, epochs);
-        })
-        .ContinueWith(t => {
-            Dispatcher.Invoke(() => {
-                ResultTextBlock.Text = string.Join(Environment.NewLine, _historyResultsMiddleware.HistoryResult);
-            });
-        });
-    }
-
-    private void Load_Click(object sender, RoutedEventArgs e) {
-        throw new NotImplementedException();
+        Task.Run(() => { _agent.Fit(inputData, outputData, epochs); })
+            .ContinueWith(t => { Dispatcher.Invoke(() => { ResultTextBlock.Text = string.Join(Environment.NewLine, _historyResultsMiddleware.HistoryResult); }); });
     }
 
     private void ResetNet_Click(object sender, RoutedEventArgs e) {
@@ -90,9 +82,21 @@ public partial class MainWindow : Window {
         ResultTextBlock.Text = string.Empty;
         _plotHistoryEpochMiddleware.Reset();
         _historyResultsMiddleware.Reset();
-        
+
         _agent.Dispose();
         _agent = CreateAgent();
+    }
+
+    private void Load_Click(object sender, RoutedEventArgs e) {
+        OpenFolderDialog folderDialog = new() {
+            Title = "Select the folder to import"
+        };
+
+        if (folderDialog.ShowDialog() == true) {
+            string? folderName = folderDialog.FolderName;
+            FileAgentImporter importer = new(folderName);
+            _agent.Import(importer);
+        }
     }
 
     private void Save_Click(object sender, RoutedEventArgs e) {
