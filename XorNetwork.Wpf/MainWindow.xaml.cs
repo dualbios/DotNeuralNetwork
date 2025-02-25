@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using kDg.DotNeuralNetwork.Agents;
+using kDg.DotNeuralNetwork.Exporters;
 using kDg.DotNeuralNetwork.Nets;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -94,6 +96,9 @@ public partial class MainWindow : Window {
     }
 
     private void Save_Click(object sender, RoutedEventArgs e) {
-        throw new NotImplementedException();
+        string path = Path.Combine("XorAgent", $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss}");
+        Directory.CreateDirectory(path);
+        FileAgentExporter exporter = new(path);
+        _agent.Export(exporter);
     }
 }
