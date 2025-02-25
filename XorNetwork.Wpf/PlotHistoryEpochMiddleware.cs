@@ -17,13 +17,13 @@ public class PlotHistoryEpochMiddleware : IEpochMiddleware {
     }
 
     public void Reset() {
-        _plotModel.Series.Clear();
+        (_plotModel.Series[0] as LineSeries)!.Points.Clear();
     }
 
     public void OnEpochFinished(EpochResults epochResults) {
         _lineSeries.Points.Add(new DataPoint(epochResults.EpochNumber, epochResults.Loss));
         if (epochResults.EpochNumber % DisplayPeriod == 0) {
-            _plotView.Dispatcher.Invoke(() => _plotModel.InvalidatePlot(true));
+            _plotView.Dispatcher.Invoke(() => _plotView.InvalidatePlot(true));
         }
     }
 

@@ -1,15 +1,5 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using kDg.DotNeuralNetwork.Agents;
-using kDg.DotNeuralNetwork.Middlewares;
 using kDg.DotNeuralNetwork.Nets;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -22,13 +12,26 @@ namespace XorNetwork.Wpf;
 /// Interaction logic for MainWindow.xaml
 /// </summary>
 public partial class MainWindow : Window {
-    private readonly TrainAgent _agent;
-    private readonly PlotHistoryEpochMiddleware _plotHistoryEpochMiddleware;
+    private TrainAgent _agent;
     private readonly HistoryResultsMiddleware _historyResultsMiddleware;
+    private readonly PlotHistoryEpochMiddleware _plotHistoryEpochMiddleware;
 
     public MainWindow() {
         InitializeComponent();
 
+        PlotView.Model = new PlotModel {
+            Title = "History",
+            Series = { new LineSeries() },
+            Axes = { new LinearAxis() { Minimum = 0 } }
+        };
+
+        _plotHistoryEpochMiddleware = new PlotHistoryEpochMiddleware(PlotView);
+        _historyResultsMiddleware = new HistoryResultsMiddleware();
+
+        _agent = CreateAgent();
+    }
+
+    private TrainAgent CreateAgent() {
         LinearFunctionedNetBuilder builder = new("test net");
         builder.SetInputSize(2)
                .SetLayerCount(1)
@@ -43,14 +46,6 @@ public partial class MainWindow : Window {
         torch.optim.Optimizer optimizer = torch.optim.Adam(net.parameters(), 0.01);
         torch.nn.Module<torch.Tensor, torch.Tensor, torch.Tensor> lossFunction = torch.nn.MSELoss(torch.nn.Reduction.Mean);
 
-        PlotView.Model = new PlotModel {
-            Title = "History",
-            Series = { new LineSeries() },
-            Axes = { new LinearAxis() { Minimum = 0 } }
-        };
-
-        _plotHistoryEpochMiddleware = new PlotHistoryEpochMiddleware(PlotView);
-        _historyResultsMiddleware = new HistoryResultsMiddleware();
 
         TrainAgentBuilder agentBuilder = new();
 
@@ -60,7 +55,7 @@ public partial class MainWindow : Window {
                     .AddEpochMiddlewares(_plotHistoryEpochMiddleware)
                     .AddEpochMiddlewares(_historyResultsMiddleware);
 
-        _agent = agentBuilder.Build();
+        return agentBuilder.Build();
     }
 
     private void Fit_OnClick(object sender, RoutedEventArgs e) {
@@ -72,16 +67,33 @@ public partial class MainWindow : Window {
         _historyResultsMiddleware.SetDisplayPeriod(period);
         _historyResultsMiddleware.SetAgent(_agent);
 
-        _agent.Fit(inputData, outputData, 1000);
-
-        ResultTextBlock.Text = string.Join(Environment.NewLine, _historyResultsMiddleware.HistoryResult);
-    }
-
-    private void Save_Click(object sender, RoutedEventArgs e) {
-        throw new NotImplementedException();
+        int epochs = int.Parse(EpochCountTextbox.Text);
+        Task.Run(()=> {
+            _agent.Fit(inputData, outputData, epochs);
+        })
+        .ContinueWith(t => {
+            Dispatcher.Invoke(() => {
+                ResultTextBlock.Text = string.Join(Environment.NewLine, _historyResultsMiddleware.HistoryResult);
+            });
+        });
     }
 
     private void Load_Click(object sender, RoutedEventArgs e) {
+        throw new NotImplementedException();
+    }
+
+    private void ResetNet_Click(object sender, RoutedEventArgs e) {
+        (PlotView.Model.Series[0] as LineSeries)!.Points.Clear();
+        PlotView.InvalidatePlot(true);
+        ResultTextBlock.Text = string.Empty;
+        _plotHistoryEpochMiddleware.Reset();
+        _historyResultsMiddleware.Reset();
+        
+        _agent.Dispose();
+        _agent = CreateAgent();
+    }
+
+    private void Save_Click(object sender, RoutedEventArgs e) {
         throw new NotImplementedException();
     }
 }

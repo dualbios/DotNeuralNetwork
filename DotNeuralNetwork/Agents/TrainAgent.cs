@@ -5,7 +5,7 @@ using TorchSharp;
 
 namespace kDg.DotNeuralNetwork.Agents;
 
-public class TrainAgent {
+public class TrainAgent : IDisposable {
     private readonly IEnumerable<IEpochMiddleware> _epochMiddlewares = [];
 
     public TrainAgent(NetBase model,
@@ -135,5 +135,11 @@ public class TrainAgent {
         }
 
         return array;
+    }
+
+    public void Dispose() {
+        LossFunction.Dispose();
+        Model.Dispose();
+        Optimizer.Dispose();
     }
 }

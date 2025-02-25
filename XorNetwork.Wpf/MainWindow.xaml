@@ -12,24 +12,34 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="100" />
+            <RowDefinition Height="8" />
+            <RowDefinition Height="150" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Grid.Row="0">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="4 0"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Width" Value="80"/>
+                </Style>
+            </StackPanel.Resources>
             <HeaderedContentControl Header="Epochs count" Margin="4 0">
                 <TextBox x:Name="EpochCountTextbox" Text="500"/>
             </HeaderedContentControl>
             <HeaderedContentControl Header="Display period" Margin="4 0">
                 <TextBox x:Name="DisplayPeriodTextbox" Text="100"/>
             </HeaderedContentControl>
-            <Button Content="Fit" Click="Fit_OnClick"  Margin="4 0" VerticalAlignment="Center"/>
-            <Button Content="Save" Click="Save_Click" Margin="4 0" VerticalAlignment="Center"/> 
-            <Button Content="Load" Click="Load_Click" Margin="4 0" VerticalAlignment="Center"/> 
+            <Button Content="Fit" Click="Fit_OnClick" />
+            <Button Content="Save" Click="Save_Click" /> 
+            <Button Content="Load" Click="Load_Click" /> 
+            <Button Content="Reset Net" Click="ResetNet_Click"/> 
         </StackPanel>
         
         <TextBlock Grid.Row="1" x:Name="EpochsCountTextBlock" />
         <oxy:PlotView Grid.Row="2" x:Name="PlotView" />
-        <TextBox Grid.Row="3" x:Name="ResultTextBlock" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"/>
+        <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" />
+        <TextBox Grid.Row="4" x:Name="ResultTextBlock" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"/>
     </Grid>
 </Window>
