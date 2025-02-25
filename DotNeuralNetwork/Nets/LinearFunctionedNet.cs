@@ -10,8 +10,8 @@ public sealed class LinearFunctionedNet : NetBase {
     private readonly torch.nn.Module<torch.Tensor, torch.Tensor> _outputLayer;
 
     public LinearFunctionedNet(string name, int inputSize, int perceptronCount, int layerCount, Func<torch.Tensor, torch.Tensor>[] functions, int outputSize) : base(name) {
-        if (functions.Length != layerCount + 2) {
-            throw new ArgumentException("The number of functions must be equal to the number of layers plus 2 (1 for input layer and 1 for output layer).");
+        if (functions.Length != layerCount + 1) {
+            throw new ArgumentException("The number of functions must be equal to the number of layers plus 1 for input layer.");
         }
 
         _functions = functions;
@@ -48,6 +48,7 @@ public sealed class LinearFunctionedNet : NetBase {
             x = _functions[index + 1](layer.forward(x));
         }
 
-        return _functions[^1](_outputLayer.forward(x));
+        //return _functions[^1](_outputLayer.forward(x));
+        return _outputLayer.forward(x);
     }
 }

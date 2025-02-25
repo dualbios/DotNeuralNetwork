@@ -42,6 +42,6 @@ public sealed class LinearReluNet : NetBase {
             x = torch.nn.functional.relu(layer.forward(x));
         }
 
-        return torch.nn.functional.relu(_outputLayer.forward(x));
+        return _outputLayer.forward(x);
     }
 }

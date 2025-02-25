@@ -32,7 +32,7 @@ public class Tests {
         torch.optim.Optimizer optimizer = torch.optim.Adam(net.parameters(), 0.01);
         torch.nn.Module<torch.Tensor, torch.Tensor, torch.Tensor> lossFunction = torch.nn.MSELoss(torch.nn.Reduction.Mean);
 
-        var epochs = 5001;
+        var epochs = 1001;
         for (var epoch = 0; epoch < epochs; epoch++) {
             net.train();
             optimizer.zero_grad();
