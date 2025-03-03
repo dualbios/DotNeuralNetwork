@@ -14,7 +14,7 @@ public sealed class LinearReluNet : NetBase {
                                                                                               .Select(_ => torch.nn.Linear(perceptronCount, perceptronCount))
                                                                                               .ToArray<torch.nn.Module<torch.Tensor, torch.Tensor>>());
         _outputLayer = torch.nn.Linear(perceptronCount, outputSize);
-
+        
         RegisterComponents();
     }
 
