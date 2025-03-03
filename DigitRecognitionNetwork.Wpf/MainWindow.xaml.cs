@@ -62,12 +62,8 @@ public partial class MainWindow : Window {
 
     private void StatusCallback(Status status) {
         Dispatcher.Invoke(() => {
-            //StatusTextBlock.Text = status.Message;
             if (status.Progress * 100 % 25 == 0) {
                 StatusTextBlock.Text = status.Progress.ToString("P2");
-                // if (status.IsDone) {
-                //     StatusTextBlock.Text = "Done!";
-                // }
                 (PlotView.Model.Series[0] as LineSeries)!.Points.Clear();
             }
         });
@@ -97,15 +93,11 @@ public partial class MainWindow : Window {
         Task.Run(async () => await _trainEnvironment.TrainAsync(_plotHistoryEpochMiddleware, TrainStatusCallback))
             .ContinueWith(t => Dispatcher.Invoke(() => {
                 StatusTextBlock.Text = "Done!";
-                //(PlotView.Model.Series[0] as LineSeries)!.Points.Clear();
             }));
     }
 
     private void TrainStatusCallback(Status status) {
         Dispatcher.Invoke(() => {
-            // if (status.Progress * _plotHistoryEpochMiddleware.DisplayPeriod % _plotHistoryEpochMiddleware.DisplayPeriod == 0) {
-            //     (PlotView.Model.Series[0] as LineSeries)!.Points.Clear();
-            // }
             StatusTextBlock.Text = status.Progress.ToString("P2");
             (PlotView.Model.Series[0] as LineSeries)!.Points.Clear();
             PlotView.Model.InvalidatePlot(true);
@@ -125,7 +117,6 @@ public partial class MainWindow : Window {
         float[] pred = _trainEnvironment.Predict(pixelValues);
         float maxPrediction = pred.Max();
         int maxIndex = Array.IndexOf(pred, maxPrediction);
-        //StatusTextBlock.Text = $"Predicted: {maxIndex}. {pred.Select((x,i)=>$"[{i}:{x:F4}]").Aggregate((a,b)=>$"{a}, {b}")}";
         StatusTextBlock.Text = $"Predicted: {maxIndex}.";
         
         _barSeries.Points.Clear();
