@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNeuralNetwork.Tests", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XorNetwork.Wpf", "XorNetwork.Wpf\XorNetwork.Wpf.csproj", "{C4976D16-4BF1-4025-AA37-FDCB9CCC9402}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitRecognitionNetwork.Wpf", "DigitRecognitionNetwork.Wpf\DigitRecognitionNetwork.Wpf.csproj", "{1CF6ED08-F2B2-46F5-ACC7-C0AD2B4E3425}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{C4976D16-4BF1-4025-AA37-FDCB9CCC9402}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4976D16-4BF1-4025-AA37-FDCB9CCC9402}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4976D16-4BF1-4025-AA37-FDCB9CCC9402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CF6ED08-F2B2-46F5-ACC7-C0AD2B4E3425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF6ED08-F2B2-46F5-ACC7-C0AD2B4E3425}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF6ED08-F2B2-46F5-ACC7-C0AD2B4E3425}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF6ED08-F2B2-46F5-ACC7-C0AD2B4E3425}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

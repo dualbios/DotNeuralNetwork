@@ -32,26 +32,26 @@ public class TrainAgent : IDisposable {
 
     public void Fit(float[,] inputData, float[] outputData, int epochs) {
         torch.Tensor input = torch.tensor(inputData);
-        torch.Tensor output = torch.tensor(outputData).reshape(-1, 1);
+        torch.Tensor output = torch.tensor(outputData);
         Fit(input, output, epochs);
     }
 
     public void Fit(float[,] inputData, float[,] outputData, int epochs) {
         torch.Tensor input = torch.tensor(inputData);
-        torch.Tensor output = torch.tensor(outputData).reshape(-1, 1);
+        torch.Tensor output = torch.tensor(outputData);
         Fit(input, output, epochs);
     }
 
     public void Fit(float[] inputData, float[,] outputData, int epochs) {
         torch.Tensor input = torch.tensor(inputData);
-        torch.Tensor output = torch.tensor(outputData).reshape(-1, 1);
+        torch.Tensor output = torch.tensor(outputData);
         Fit(input, output, epochs);
     }
 
 
     public void Fit(float[] inputData, float[] outputData, int epochs) {
         torch.Tensor input = torch.tensor(inputData);
-        torch.Tensor output = torch.tensor(outputData).reshape(-1, 1);
+        torch.Tensor output = torch.tensor(outputData).reshape(1, -1);
         Fit(input, output, epochs);
     }
 
