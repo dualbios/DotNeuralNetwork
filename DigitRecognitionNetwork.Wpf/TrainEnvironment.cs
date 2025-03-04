@@ -70,7 +70,7 @@ public class TrainEnvironment {
                 outputs[i, _imageDataList[i].Folder] = 1;
             }
 
-            _agent.Fit(inputs, outputs, 10000);
+            _agent.Fit(inputs, outputs, 1000);
         }
         catch (Exception e) {
             Console.WriteLine(e);
@@ -111,27 +111,14 @@ public class TrainEnvironment {
     }
 
     private TrainAgent CreateAgent(PlotHistoryEpochMiddleware plotHistoryEpochMiddleware) {
-        // LinearFunctionedNetBuilder builder = new("test net");
-        // builder.SetInputSize(28 * 28)
-        //        .SetLayerCount(3)
-        //        .SetPerceptronCount(32)
-        //        .AddFunction(x => torch.nn.functional.relu(x))
-        //        .AddFunction(x => torch.nn.functional.relu(x))
-        //        .AddFunction(x => torch.nn.functional.relu(x))
-        //        .AddFunction(x => torch.nn.functional.sigmoid(x))
-        //        //.AddFunction(x => torch.nn.functional.softmax(x, 1))
-        //        .SetOutputSize(10);
-        //
-        // LinearFunctionedNet net = builder.Build();
-        NetBase net = new LayeredNet("layered test net",
-                                     new LayeredNetInputLayer("input", 28 * 28, torch.nn.ReLU()),
-                                     [
-                                         new LayeredNetLayer("l2", 32, torch.nn.ReLU()),
-                                         new LayeredNetLayer("l3", 32, torch.nn.ReLU()),
-                                         new LayeredNetLayer("l4", 32, torch.nn.Sigmoid()),
-                                     ]
-                                     , new LayeredNetOutputLayer("output", 10));
-
+        NetBase net = new LayeredNetBuilder("layered test net")
+            .SetInputLayer("input", 28 * 28, torch.nn.ReLU())
+            .AddLayer("l2", 32, torch.nn.ReLU())
+            .AddLayer("l3", 32, torch.nn.ReLU())
+            .AddLayer("l4", 32, torch.nn.Sigmoid())
+            .SetOutputLayer("output", 10)
+            .Build();
+        
         torch.optim.Optimizer optimizer = torch.optim.Adam(net.parameters(), 0.01);
         //torch.nn.Module<torch.Tensor, torch.Tensor, torch.Tensor> lossFunction = torch.nn.MSELoss();
         torch.nn.Module<torch.Tensor, torch.Tensor, torch.Tensor> lossFunction = torch.nn.CrossEntropyLoss();
