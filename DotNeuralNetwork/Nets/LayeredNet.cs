@@ -1,91 +1,45 @@
 ﻿using TorchSharp;
-using TorchSharp.Modules;
 
 namespace kDg.DotNeuralNetwork.Nets;
 
-public class LayeredNet : NetBase {
-    private readonly Func<torch.Tensor, torch.Tensor>[] _functions;
-    private readonly torch.nn.Module<torch.Tensor, torch.Tensor> _inputLayer;
-    private readonly ModuleList<torch.nn.Module<torch.Tensor, torch.Tensor>> _hiddenLayers;
-    //private readonly torch.nn.Module<torch.Tensor, torch.Tensor> _outputLayer;
+public sealed class LayeredNet : NetBase {
+    private torch.nn.Module<torch.Tensor, torch.Tensor> _model = null;
 
     public LayeredNet(string name, LayeredNetInputLayer inputLayer, LayeredNetLayer[] layers, LayeredNetOutputLayer outputLayer) : base(name) {
-        
-        _inputLayer = torch.nn.Linear(inputLayer.InputCount, layers.First().PerceptronCount);
-        
-        _hiddenLayers =new ModuleList<torch.nn.Module<torch.Tensor, torch.Tensor>>();
-        for (var index = 0; index < layers.Length-1; index++) {
-            _hiddenLayers.Add(torch.nn.Linear(layers[index].PerceptronCount, layers[index+1].PerceptronCount));
-        }
-        
-        _hiddenLayers.Add(torch.nn.Linear(layers.Last().PerceptronCount, outputLayer.OutputCount));
+        var l = new List<Tuple<string, torch.nn.Module<torch.Tensor, torch.Tensor>>> {
+            new(inputLayer.Name, torch.nn.Linear(inputLayer.InputCount, layers.First().PerceptronCount)),
+            new(inputLayer.Name + "activation", inputLayer.Activation)
+        };
 
-        _functions = new[] {inputLayer.Activation}.Concat(layers.Select(layer => layer.Activation)).ToArray();
-        
-        //_outputLayer = torch.nn.Linear(outputLayer.OutputCount, outputLayer.OutputCount);
+        for (var index = 0; index < layers.Length - 1; index++) {
+            LayeredNetLayer layer = layers[index];
+            l.Add(new Tuple<string, torch.nn.Module<torch.Tensor, torch.Tensor>>(layer.Name, torch.nn.Linear(layer.PerceptronCount, layers[index + 1].PerceptronCount)));
+            l.Add(new Tuple<string, torch.nn.Module<torch.Tensor, torch.Tensor>>(layer.Name + "activation", layer.Activation));
+        }
+
+        l.Add(new Tuple<string, torch.nn.Module<torch.Tensor, torch.Tensor>>(inputLayer.Name, torch.nn.Linear(layers.Last().PerceptronCount, outputLayer.OutputCount)));
+        if (outputLayer.Activation is not null) {
+            l.Add(new Tuple<string, torch.nn.Module<torch.Tensor, torch.Tensor>>(outputLayer.Name + "activation", outputLayer.Activation));
+        }
+
+        _model = torch.nn.Sequential(l);
+
+        RegisterComponents();
     }
 
-    public override torch.Tensor forward(torch.Tensor x)
-    {
-        if (x.dim() == 1) {
-            x = x.unsqueeze(0);
-        }
-
-        x = _functions[0](_inputLayer.forward(x));
-        for (var index = 0; index < _hiddenLayers.Count-1; index++) {
-            var layer = _hiddenLayers[index];
-            x = _functions[index + 1](layer.forward(x));
-        }
-
-        //return x;
-        return _hiddenLayers.Last().forward(x);
-    }
-    
     protected override void Dispose(bool disposing) {
-        if (disposing) {
-            foreach (torch.nn.Module<torch.Tensor, torch.Tensor> module in _hiddenLayers) {
-                module.Dispose();
-            }
-
-            _inputLayer.Dispose();
-            //_outputLayer.Dispose();
-        }
+        _model?.Dispose();
 
         base.Dispose(disposing);
     }
 
-}
-
-public record LayeredNetLayer {
-    public string Name { get; }
-    public int PerceptronCount { get; }
-    public Func<torch.Tensor, torch.Tensor> Activation { get; }
-
-    public LayeredNetLayer(string name, int perceptronCount, Func<torch.Tensor, torch.Tensor>? activation) {
-        Name = name;
-        PerceptronCount = perceptronCount;
-        Activation = activation;
+    public override torch.Tensor forward(torch.Tensor x) {
+        return _model.forward(x);
     }
 }
 
-public record LayeredNetInputLayer {
-    public string Name { get; }
-    public int InputCount { get; }
-    public Func<torch.Tensor, torch.Tensor> Activation { get; }
+public record LayeredNetLayer(string Name, int PerceptronCount, torch.nn.Module<torch.Tensor, torch.Tensor> Activation);
 
-    public LayeredNetInputLayer(string name, int inputCount, Func<torch.Tensor, torch.Tensor> activation) {
-        Name = name;
-        InputCount = inputCount;
-        Activation = activation;
-    }
-}
+public record LayeredNetInputLayer(string Name, int InputCount, torch.nn.Module<torch.Tensor, torch.Tensor> Activation);
 
-public record LayeredNetOutputLayer {
-    public string Name { get; }
-    public int OutputCount { get; }
-
-    public LayeredNetOutputLayer(string name, int outputCount) {
-        Name = name;
-        OutputCount = outputCount;
-    }
-}
+public record LayeredNetOutputLayer(string Name, int OutputCount, torch.nn.Module<torch.Tensor, torch.Tensor>? Activation = null);

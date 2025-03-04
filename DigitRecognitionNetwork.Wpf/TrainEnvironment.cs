@@ -49,6 +49,7 @@ public class TrainEnvironment {
 
     public async Task TrainAsync(PlotHistoryEpochMiddleware plotHistoryEpochMiddleware, Action<Status> statusCallback) {
         try {
+            _agent?.Dispose();
             _agent = CreateAgent(plotHistoryEpochMiddleware);
 
             var random = new Random(DateTime.Now.Microsecond);
@@ -69,7 +70,7 @@ public class TrainEnvironment {
                 outputs[i, _imageDataList[i].Folder] = 1;
             }
 
-            _agent.Fit(inputs, outputs, 1000);
+            _agent.Fit(inputs, outputs, 10000);
         }
         catch (Exception e) {
             Console.WriteLine(e);
@@ -123,16 +124,11 @@ public class TrainEnvironment {
         //
         // LinearFunctionedNet net = builder.Build();
         NetBase net = new LayeredNet("layered test net",
-                                     new LayeredNetInputLayer("input", 28 * 28, x => torch.nn.functional.relu(x)),
+                                     new LayeredNetInputLayer("input", 28 * 28, torch.nn.ReLU()),
                                      [
-                                         new LayeredNetLayer("l1", 32, x => torch.nn.functional.relu(x)),
-                                         new LayeredNetLayer("l2", 32, x => torch.nn.functional.relu(x)),
-                                         new LayeredNetLayer("l3", 32, x => torch.nn.functional.sigmoid(x)),
-
-                                         // new LayeredNetlLayer("l2", torch.nn.Linear(32, 32), torch.nn.ReLU()),
-                                         // new LayeredNetlLayer("l3", torch.nn.Linear(32, 32), torch.nn.ReLU()),
-                                         //new LayeredNetLayer("l4", torch.nn.Linear(32, 10), torch.nn.Sigmoid()),
-                                         //new LayeredNetlLayer("l5", torch.nn.Linear(32, 10))
+                                         new LayeredNetLayer("l2", 32, torch.nn.ReLU()),
+                                         new LayeredNetLayer("l3", 32, torch.nn.ReLU()),
+                                         new LayeredNetLayer("l4", 32, torch.nn.Sigmoid()),
                                      ]
                                      , new LayeredNetOutputLayer("output", 10));
 

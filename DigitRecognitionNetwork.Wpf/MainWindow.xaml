@@ -23,7 +23,7 @@
             <Button Content="Predict" Click="Predict_Click" />
         </StackPanel>
 
-        
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
@@ -32,11 +32,17 @@
             <oxy:PlotView Grid.Column="0" x:Name="PlotView" />
             <oxy:PlotView Grid.Column="1" x:Name="ResultPlotView" />
         </Grid>
-        
-        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch"/>
+
+        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" />
 
         <Grid Grid.Row="3">
-            <Button Content="Clear" Click="Clear_Click" HorizontalAlignment="Right" VerticalAlignment="Top" />
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Button Content="Clear" Click="Clear_Click" />
+                <Button Content="1x" Click="PenSize_x1_Click"/>
+                <Button Content="2x" Click="PenSize_x2_Click"/>
+                <Button Content="3x" Click="PenSize_x3_Click"/>
+            </StackPanel>
+
             <local:DrawingControl x:Name="DrawingControl" />
         </Grid>
     </Grid>
