@@ -52,10 +52,10 @@ public class TrainEnvironment {
             _agent = CreateAgent(plotHistoryEpochMiddleware);
 
             var random = new Random(DateTime.Now.Microsecond);
-            
-            float [,] inputs = new float[_imageDataList.Count, 28 * 28];
-            float [,] outputs = new float[_imageDataList.Count, 10];
-            
+
+            float[,] inputs = new float[_imageDataList.Count, 28 * 28];
+            float[,] outputs = new float[_imageDataList.Count, 10];
+
             for (var i = 0; i < _imageDataList.Count; i++) {
                 float[,] image = _imageDataList[i].Image;
                 for (var y = 0; y < image.GetLength(1); y++) {
@@ -64,7 +64,7 @@ public class TrainEnvironment {
                     }
                 }
             }
-            
+
             for (var i = 0; i < _imageDataList.Count; i++) {
                 outputs[i, _imageDataList[i].Folder] = 1;
             }
@@ -76,18 +76,15 @@ public class TrainEnvironment {
             throw;
         }
     }
-    
-    static string ToSquaredString(float[][] array)
-    {
+
+    static string ToSquaredString(float[][] array) {
         StringBuilder sb = new StringBuilder();
         int rows = array.Length;
         int cols = array[0].Length;
         float[,] outputs = new float[rows, cols];
-        for (int i = 0; i < rows; i++)
-        {
-            for (int j = 0; j < cols; j++)
-            {
-               sb.Append($"{array[i][j].ToString("N2")} ");
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                sb.Append($"{array[i][j].ToString("N2")} ");
             }
 
             sb.AppendLine();
@@ -95,18 +92,15 @@ public class TrainEnvironment {
 
         return sb.ToString();
     }
-    
-    static string ToSquaredString(float[,] array)
-    {
+
+    static string ToSquaredString(float[,] array) {
         StringBuilder sb = new StringBuilder();
         int rows = array.GetLength(0);
         int cols = array.GetLength(1);
         float[,] outputs = new float[rows, cols];
-        for (int j = 0; j < cols; j++)
-        {
-            for (int i = 0; i < rows; i++)
-            {
-               sb.Append($"{array[i, j].ToString("N2")} ");
+        for (int j = 0; j < cols; j++) {
+            for (int i = 0; i < rows; i++) {
+                sb.Append($"{array[i, j].ToString("N2")} ");
             }
 
             sb.AppendLine();
@@ -116,18 +110,31 @@ public class TrainEnvironment {
     }
 
     private TrainAgent CreateAgent(PlotHistoryEpochMiddleware plotHistoryEpochMiddleware) {
-        LinearFunctionedNetBuilder builder = new("test net");
-        builder.SetInputSize(28 * 28)
-               .SetLayerCount(3)
-               .SetPerceptronCount(32)
-               .AddFunction(x => torch.nn.functional.relu(x))
-               .AddFunction(x => torch.nn.functional.relu(x))
-               .AddFunction(x => torch.nn.functional.relu(x))
-               .AddFunction(x => torch.nn.functional.sigmoid(x))
-               //.AddFunction(x => torch.nn.functional.softmax(x, 1))
-               .SetOutputSize(10);
+        // LinearFunctionedNetBuilder builder = new("test net");
+        // builder.SetInputSize(28 * 28)
+        //        .SetLayerCount(3)
+        //        .SetPerceptronCount(32)
+        //        .AddFunction(x => torch.nn.functional.relu(x))
+        //        .AddFunction(x => torch.nn.functional.relu(x))
+        //        .AddFunction(x => torch.nn.functional.relu(x))
+        //        .AddFunction(x => torch.nn.functional.sigmoid(x))
+        //        //.AddFunction(x => torch.nn.functional.softmax(x, 1))
+        //        .SetOutputSize(10);
+        //
+        // LinearFunctionedNet net = builder.Build();
+        NetBase net = new LayeredNet("layered test net",
+                                     new LayeredNetInputLayer("input", 28 * 28, x => torch.nn.functional.relu(x)),
+                                     [
+                                         new LayeredNetLayer("l1", 32, x => torch.nn.functional.relu(x)),
+                                         new LayeredNetLayer("l2", 32, x => torch.nn.functional.relu(x)),
+                                         new LayeredNetLayer("l3", 32, x => torch.nn.functional.sigmoid(x)),
 
-        LinearFunctionedNet net = builder.Build();
+                                         // new LayeredNetlLayer("l2", torch.nn.Linear(32, 32), torch.nn.ReLU()),
+                                         // new LayeredNetlLayer("l3", torch.nn.Linear(32, 32), torch.nn.ReLU()),
+                                         //new LayeredNetLayer("l4", torch.nn.Linear(32, 10), torch.nn.Sigmoid()),
+                                         //new LayeredNetlLayer("l5", torch.nn.Linear(32, 10))
+                                     ]
+                                     , new LayeredNetOutputLayer("output", 10));
 
         torch.optim.Optimizer optimizer = torch.optim.Adam(net.parameters(), 0.01);
         //torch.nn.Module<torch.Tensor, torch.Tensor, torch.Tensor> lossFunction = torch.nn.MSELoss();
