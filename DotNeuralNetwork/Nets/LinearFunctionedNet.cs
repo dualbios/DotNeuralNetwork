@@ -5,8 +5,8 @@ namespace kDg.DotNeuralNetwork.Nets;
 
 public sealed class LinearFunctionedNet : NetBase {
     private readonly Func<torch.Tensor, torch.Tensor>[] _functions;
-    private readonly ModuleList<torch.nn.Module<torch.Tensor, torch.Tensor>> _hiddenLayers;
     private readonly torch.nn.Module<torch.Tensor, torch.Tensor> _inputLayer;
+    private readonly ModuleList<torch.nn.Module<torch.Tensor, torch.Tensor>> _hiddenLayers;
     private readonly torch.nn.Module<torch.Tensor, torch.Tensor> _outputLayer;
 
     public LinearFunctionedNet(string name, int inputSize, int perceptronCount, int layerCount, Func<torch.Tensor, torch.Tensor>[] functions, int outputSize) : base(name) {

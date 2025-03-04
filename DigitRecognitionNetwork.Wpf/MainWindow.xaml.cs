@@ -43,7 +43,7 @@ public partial class MainWindow : Window {
         ResultPlotView.Model = new PlotModel {
             Title = "Result",
             Series = { _barSeries },
-            Axes = { new LinearAxis() { Minimum = 0, Maximum = 1} }
+            Axes = { new LinearAxis() { Minimum = 0} }
         };
 
         _plotHistoryEpochMiddleware = new PlotHistoryEpochMiddleware(PlotView);
@@ -128,5 +128,17 @@ public partial class MainWindow : Window {
 
     private void Clear_Click(object sender, RoutedEventArgs e) {
         DrawingControl.Clear();
+    }
+
+    private void PenSize_x1_Click(object sender, RoutedEventArgs e) {
+        DrawingControl.PenSize = 0;
+    }
+
+    private void PenSize_x2_Click(object sender, RoutedEventArgs e) {
+        DrawingControl.PenSize = 1;
+    }
+
+    private void PenSize_x3_Click(object sender, RoutedEventArgs e) {
+        DrawingControl.PenSize = 2;
     }
 }
