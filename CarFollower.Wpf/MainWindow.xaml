@@ -1,0 +1,62 @@
+﻿<Window x:Class="CarFollower.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CarFollower.Wpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        xmlns:oxy="http://oxyplot.org/wpf">
+    <DockPanel LastChildFill="True">
+        
+        <StackPanel VerticalAlignment="Top"
+                    DockPanel.Dock="Top"
+                    Orientation="Vertical"
+                    HorizontalAlignment="Left">
+            <HeaderedContentControl Header="Iteration count">
+                <TextBox x:Name="IterationCount"/>
+            </HeaderedContentControl>
+            <Button Content="Setup Environment" Click="SetupEnvironmentClick"/>
+            <Button Content="Train" Click="TrainClick"/>
+            <TextBlock x:Name="StatusTextBlock"/>
+        </StackPanel>
+        
+        <DockPanel DockPanel.Dock="Top"
+                   LastChildFill="True">
+            <StackPanel DockPanel.Dock="Right"
+                        Orientation="Vertical">
+                <HeaderedContentControl Header="Follower Speed">
+                    <TextBox x:Name="FollowerSpeedTextbox"/>
+                </HeaderedContentControl>
+                <HeaderedContentControl Header="Leader Speed">
+                    <TextBox x:Name="LeaderSpeedTextbox"/>
+                </HeaderedContentControl>
+                <HeaderedContentControl Header="Distance">
+                    <TextBox x:Name="DistanceTextbox"/>
+                </HeaderedContentControl>
+                <!-- <Button Content="Run" Click="RunSimulation"/> -->
+                <Button Content="Step" Click="StepSimulation"/>
+                
+                <HeaderedContentControl Header="Predicted action">
+                    <TextBox x:Name="PredictedActionTextbox"/>
+                </HeaderedContentControl>
+                
+                <Button Content="Reset" Click="ResetSimulation"/>
+
+            </StackPanel>
+            
+            <Viewbox Stretch="Uniform">
+                <Canvas Width="320" Height="150">
+                    <Rectangle x:Name="Follower" Width="32" Height="8" Fill="Navy" Canvas.Left="0" Canvas.Top="60" />
+                    <Rectangle x:Name="Leader" Width="32" Height="8" Fill="Brown" Canvas.Left="50" Canvas.Top="60">
+                        <Rectangle.RenderTransform>
+                            <TranslateTransform X="{Binding StateDistanceValue}" Y="0" />
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                </Canvas>
+            </Viewbox>
+        </DockPanel>
+        
+        <oxy:PlotView x:Name="PlotView" />
+    </DockPanel>
+</Window>

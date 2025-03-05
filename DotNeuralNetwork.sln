@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XorNetwork.Wpf", "XorNetwor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitRecognitionNetwork.Wpf", "DigitRecognitionNetwork.Wpf\DigitRecognitionNetwork.Wpf.csproj", "{1CF6ED08-F2B2-46F5-ACC7-C0AD2B4E3425}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarFollower.Wpf", "CarFollower.Wpf\CarFollower.Wpf.csproj", "{0435BBD1-0F6A-43FA-8E0F-1EFB94CE5FCF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{1CF6ED08-F2B2-46F5-ACC7-C0AD2B4E3425}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CF6ED08-F2B2-46F5-ACC7-C0AD2B4E3425}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CF6ED08-F2B2-46F5-ACC7-C0AD2B4E3425}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0435BBD1-0F6A-43FA-8E0F-1EFB94CE5FCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0435BBD1-0F6A-43FA-8E0F-1EFB94CE5FCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0435BBD1-0F6A-43FA-8E0F-1EFB94CE5FCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0435BBD1-0F6A-43FA-8E0F-1EFB94CE5FCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
